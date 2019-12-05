@@ -22,4 +22,3 @@ npx https://github.com/tehzevo/configbot config.yml
 * regex
 * more magics
 * invite permissions
-* (auto) sharding
