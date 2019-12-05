@@ -6,8 +6,10 @@ var YAML = require("yaml");
 var Eris = require("eris");
 var traverse = require('traverse');
 var deepcopy = require("deepcopy");
+var fd = require("format-duration");
 
 var client;
+var startTime;
 
 function onlyMention(text)
 {
@@ -28,7 +30,8 @@ function send(msg, response)
 function replacer(x, msg)
 {
   //resolve shard id
-  var shard = msg.channel.guild == null ? 0 : client.guildShardMap[msg.channel.guild.id];
+  var shardID = msg.channel.guild == null ? 0 : client.guildShardMap[msg.channel.guild.id];
+  var shard = client.shards.get(shardID);
   x = x.replace("@guilds", client.guilds.size);
   x = x.replace("@users", client.users.size);
   x = x.replace("@time", new Date().toLocaleString());
@@ -37,8 +40,10 @@ function replacer(x, msg)
   x = x.replace("@invite", `https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&permissions=0&scope=bot`);
   x = x.replace("@name", client.user.username);
   x = x.replace("@tag", client.user.username + "#" + client.user.discriminator);
-  x = x.replace("@shard", shard+1);
+  x = x.replace("@shard", shardID+1);
   x = x.replace("@shards", client.shards.size);
+  x = x.replace("@uptime", fd(client.uptime));
+  x = x.replace("@ping", shard.latency);
 
   //TODO:
   //uptime
@@ -71,15 +76,12 @@ function replaceMagics(response, msg)
 
 function configbot(config)
 {
-  console.log(config.sharding)
   //handle sharding:
   var sharding = config.sharding || {};
   var maxShards = sharding.max || "auto";
   var firstShardID = sharding.first || 0;
   var lastShardID = sharding.last || (typeof maxShards == "number" ? maxShards - 1 : 0);
   var options = { maxShards, firstShardID, lastShardID };
-  
-  console.log(options)
 
   client = new Eris(config.token, options);
 
@@ -107,6 +109,7 @@ function configbot(config)
 
   //client.login(config.token);
   client.connect();
+  startTime = Date.now();
 }
 
 if(require.main === module)
