@@ -6,6 +6,8 @@ var Discord = require('discord.js');
 var traverse = require('traverse');
 var deepcopy = require("deepcopy");
 
+var client;
+
 function onlyMention(text)
 {
   var match = text.match(/^<@!?([0-9]+)>$/);
@@ -55,7 +57,7 @@ function replaceMagics(response)
 
 function configbot(config)
 {
-  var client = new Discord.Client();
+  client = new Discord.Client();
 
   client.on('message', msg => {
     var content = msg.content;
