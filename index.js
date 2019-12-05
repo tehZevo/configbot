@@ -46,7 +46,6 @@ function replacer(x, msg)
   x = x.replace("@ping", shard.latency);
 
   //TODO:
-  //uptime
   //voice channel connections (for music bots)
   //guildmember.displayname
   //guildmember.nickname
@@ -74,7 +73,7 @@ function replaceMagics(response, msg)
   return response;
 }
 
-function configbot(config)
+function configbot(config, token)
 {
   //handle sharding:
   var sharding = config.sharding || {};
@@ -83,7 +82,7 @@ function configbot(config)
   var lastShardID = typeof maxShards == "number" ? (sharding.last || maxShards - 1) : 0;
   var options = { maxShards, firstShardID, lastShardID };
 
-  client = new Eris(config.token, options);
+  client = new Eris(token || config.token, options);
 
   //client.on('message', msg => {
   client.on('messageCreate', msg => {
@@ -115,7 +114,7 @@ function configbot(config)
 if(require.main === module)
 {
   var config = YAML.parse(fs.readFileSync(process.argv[2], 'utf8'));
-  configbot(config);
+  configbot(config, process.argv[3]);
 }
 
 module.exports = configbot;

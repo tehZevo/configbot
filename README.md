@@ -6,15 +6,17 @@ In an existing JS project:
 ```js
 var configbot = require("configbot");
 configbot({
-  token: "<token>",
+  token: "<token>"
   responses: {
     ping: "pong"
   }
-});
+}, "<token>"); //optional token in second parameter if you don't want to store it in the config
 ```
 Or from the shell:
-```
+```shell
 npx https://github.com/tehzevo/configbot config.yml
+#or
+npx https://github.com/tehzevo/configbot config.yml <token>
 ```
 
 ## TODO
