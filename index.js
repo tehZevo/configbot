@@ -80,7 +80,7 @@ function configbot(config)
   var sharding = config.sharding || {};
   var maxShards = sharding.max || "auto";
   var firstShardID = sharding.first || 0;
-  var lastShardID = sharding.last || (typeof maxShards == "number" ? maxShards - 1 : 0);
+  var lastShardID = typeof maxShards == "number" ? (sharding.last || maxShards - 1) : 0;
   var options = { maxShards, firstShardID, lastShardID };
 
   client = new Eris(config.token, options);
