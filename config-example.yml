@@ -1,0 +1,23 @@
+token: "<bot token here>"
+responses:
+  "@onlymention":
+    embed:
+      title: Hi I'm @name
+      description: "I was developed by tehZevo#0321. To donate or find out more about his projects, visit [zevo.me](https://zevo.me)\n **Shard stats**:"
+      url: https://zevo.me
+      color: 0x88ffaa
+      footer:
+        icon_url: https://cdn.discordapp.com/avatars/92442066080010240/cdadf6c70c6af986ab621e64ec533b6f.webp?size=128
+        text: tehZevo
+      thumbnail:
+        url: "@avatar"
+      fields:
+      - name: Guilds
+        value: "@guilds"
+        inline: true
+      - name: Users
+        value: "@users"
+        inline: true
+      - name: Invite me
+        value: "[Click here!](@invite)"
+        inline: true
