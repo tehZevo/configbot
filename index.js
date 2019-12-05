@@ -17,7 +17,7 @@ function onlyMention(text)
 function send(channel, response)
 {
   response = deepcopy(response);
-  replaceMagics(response);
+  response = replaceMagics(response);
 
   if(typeof response == "object")
   {
@@ -29,6 +29,22 @@ function send(channel, response)
   }
 }
 
+function replacer(x)
+{
+  x = x.replace("@guilds", client.guilds.array().length);
+  x = x.replace("@users", client.users.array().length);
+  x = x.replace("@time", new Date().toLocaleString());
+  x = x.replace("@id", client.user.id);
+  x = x.replace("@avatar", client.user.avatarURL);
+  x = x.replace("@invite", `https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&permissions=0&scope=bot`);
+  x = x.replace("@name", client.user.username);
+  x = x.replace("@tag", client.user.tag);
+  //TODO:
+  //guildmember.displayname
+  //guildmember.nickname
+  return x;
+}
+
 function replaceMagics(response)
 {
   if(typeof response == "object")
@@ -38,21 +54,16 @@ function replaceMagics(response)
       {
         return;
       }
-
-      x = x.replace("@guilds", client.guilds.array().length);
-      x = x.replace("@users", client.users.array().length);
-      x = x.replace("@time", new Date().toLocaleString());
-      x = x.replace("@id", client.id);
-      x = x.replace("@avatar", client.user.avatarURL);
-      x = x.replace("@invite", `https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&permissions=0&scope=bot`);
-      x = x.replace("@name", client.user.username)
-      x = x.replace("@tag", client.user.tag)
-      //guildmember.displayname
-      //guildmember.nickname
-
+      x = replacer(x);
       this.update(x);
     });
   }
+  else
+  {
+    response = replacer(response);
+  }
+
+  return response;
 }
 
 function configbot(config)
