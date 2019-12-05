@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var fs = require("fs");
 var YAML = require("yaml");
 var Discord = require('discord.js');
