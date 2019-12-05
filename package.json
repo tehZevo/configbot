@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "deepcopy": "^2.0.0",
-    "discord.js": "^11.5.1",
+    "eris": "^0.11.1",
     "traverse": "^0.6.6",
     "yaml": "^1.7.2"
   }
