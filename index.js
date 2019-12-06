@@ -48,6 +48,7 @@ function replacer(x, msg)
 
   //magic object replacement
   var matches = x.match(/(@{[_a-zA-Z][_a-zA-Z0-9]*})/g);
+  matches = matches || [];
   for(var match of matches)
   {
     var m = match.substring(2, match.length-1);
