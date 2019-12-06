@@ -2,14 +2,15 @@
 
 var fs = require("fs");
 var YAML = require("yaml");
-//var Discord = require('discord.js');
 var Eris = require("eris");
 var traverse = require('traverse');
 var deepcopy = require("deepcopy");
 var fd = require("format-duration");
 
+//TODO: return an object (class?) instead of using these globals
 var client;
 var startTime;
+var magic = {};
 
 function onlyMention(text)
 {
@@ -44,6 +45,14 @@ function replacer(x, msg)
   x = x.replace("@shards", client.shards.size);
   x = x.replace("@uptime", fd(client.uptime));
   x = x.replace("@ping", shard.latency);
+
+  //magic object replacement
+  var matches = x.match(/(@{[_a-zA-Z][_a-zA-Z0-9]*})/g);
+  for(var match of matches)
+  {
+    var m = match.substring(2, match.length-1);
+    x = x.replace(match, magic[m]);
+  }
 
   //TODO:
   //voice channel connections (for music bots)
@@ -109,6 +118,8 @@ function configbot(config, token)
   //client.login(config.token);
   client.connect();
   startTime = Date.now();
+
+  return magic; //magic object~ spoooky
 }
 
 if(require.main === module)
