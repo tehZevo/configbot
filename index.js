@@ -6,6 +6,7 @@ var Eris = require("eris");
 var traverse = require('traverse');
 var deepcopy = require("deepcopy");
 var fd = require("format-duration");
+var os = require("os")
 
 //TODO: return an object (class?) instead of using these globals
 var client;
@@ -45,6 +46,7 @@ function replacer(x, msg)
   x = x.replace("@shards", client.shards.size);
   x = x.replace("@uptime", fd(client.uptime));
   x = x.replace("@ping", shard.latency);
+  x = x.replace("@hostname", os.hostname());
 
   //magic object replacement
   var matches = x.match(/(@{[_a-zA-Z][_a-zA-Z0-9]*})/g);
