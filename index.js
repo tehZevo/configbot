@@ -19,6 +19,28 @@ function onlyMention(text)
   return match && match[1] == client.user.id;
 }
 
+function hasPrefix(text, config) {
+  var prefixes = [];
+  var cutText = text;
+
+  if (config.prefix) {
+    if (Array.isArray(config.prefix)) {
+      prefixes = config.prefix
+    } else {
+      prefixes.push(config.prefix)
+    }
+    cutText = false;
+    for (let i = 0; i < prefixes.length; i++) {
+      if (text.startsWith(prefixes[i])) {
+        cutText = text.substr(prefixes[i].length, text.length - prefixes[i].length);
+        break
+      }
+    }
+  }
+
+  return cutText
+}
+
 function send(msg, response)
 {
   var channel = msg.channel;
@@ -99,19 +121,22 @@ function configbot(config, token)
   //client.on('message', msg => {
   client.on('messageCreate', msg => {
     var content = msg.content;
-    for(var key of Object.keys(config.responses))
-    {
-      var res = config.responses[key];
-      //TODO: if starts with @/, regex?
-      if(key == "@onlymention" && onlyMention(content))
-      {
-        send(msg, res);
-      }
-      else if(content == key)
-      {
-        send(msg, res);
-      }
+
+    if (onlyMention(content) && config.responses["@onlymention"]){
+      send(msg, config.responses["@onlymention"]); // Sends onlymention then stops.
+      return;
     }
+
+    content = hasPrefix(content, config); // Checks for prefix match
+
+    if (!content) {
+      return; // Means didn't match prefixes
+    }
+
+    if (config.responses && config.responses[content]) {
+      send(msg, config.responses[content])
+    }
+
   });
 
   client.on('ready', () => {
